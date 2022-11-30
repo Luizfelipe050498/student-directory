@@ -31,7 +31,7 @@ end
 def print(students)
   while true do
     students.each_with_index do |student, index|
-      puts "#{index+1} #{student[:name]} (#{student[:cohort]} cohort), #{student[:hobbies]}, #{student[:country_of_birth]}, #{student[:height]}"
+      puts "#{index+1} #{student[:name]} (#{student[:cohort]} cohort), #{student[:hobbies]}, #{student[:country_of_birth]}, #{student[:height]}".center(478)
     end
     break
   end
