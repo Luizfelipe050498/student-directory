@@ -8,7 +8,7 @@ def input_students
     name = gets.chomp
     break if name == "stop"
     puts "Enter cohort"
-    cohort = gets.chomp
+    cohort = gets.chomp.to_sym
     puts "Enter hobbies"
     hobbies = gets.chomp
     puts "Enter country of birth"
@@ -31,7 +31,7 @@ end
 def print(students)
   while true do
     students.each_with_index do |student, index|
-      puts "#{index+1} #{student[:name]} (#{student[:cohort]} cohort), #{student[:hobbies]}, #{student[:country_of_birth]}, #{student[:height]}".center(478)
+      puts "#{index+1} #{student[:name]} (#{student[:cohort]} cohort), #{student[:hobbies]}, #{student[:country_of_birth]}, #{student[:height]}".center(10)
     end
     break
   end
