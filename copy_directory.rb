@@ -3,12 +3,23 @@ def input_students
   puts "To finish, just type stop"
 
   students = []
-
+  @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+  
   while true do
     name = gets.chomp
     break if name == "stop"
     puts "Enter cohort"
-    cohort = gets.chomp.to_sym
+    cohort = gets.chomp.capitalize
+    loop do
+      if @months.include?(cohort)
+        cohort == cohort.to_sym
+        break
+      else
+        puts "We don't know this cohort, please check your spelling"
+          @cohort = gets.chomp.capitalize
+          break
+      end
+    end
     puts "Enter hobbies"
     hobbies = gets.chomp
     puts "Enter country of birth"
@@ -17,6 +28,14 @@ def input_students
     height = gets.chomp
     students << {name: name, cohort: cohort, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
     puts "Now we have #{students.count} students. Enter the next name or stop"
+  end
+  students.each do |item|
+    item.each do |key, value|
+      value = "N/A"  
+      if item[key] == ""
+        item[key] = value
+      end
+    end
   end
   students
 end
@@ -28,20 +47,21 @@ def print_header
   puts "------------------"
 end
 
+
 def print(students)
-  while true do
-    students.each_with_index do |student, index|
-      puts "#{index+1} #{student[:name]} (#{student[:cohort]} cohort), #{student[:hobbies]}, #{student[:country_of_birth]}, #{student[:height]}".center(10)
-    end
-    break
-  end
+  students.
+    map { |s| s[:cohort] }.
+    uniq.
+    each { |c| puts "#{c} cohort students are #{students.find_all { |s| s[:cohort] == c }.map { |s| s[:name] }.join(', ')}" }
 end
+
 
 def print_footer(names)
   puts "Overall, we have #{names.count} great students"
 end
 
 #nothing happens until we call the methods
+
 students = input_students
 print_header
 print(students)
