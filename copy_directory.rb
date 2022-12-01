@@ -27,7 +27,14 @@ def input_students
     puts "Enter height"
     height = gets.chomp
     students << {name: name, cohort: cohort, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
-    puts "Now we have #{students.count} students. Enter the next name or stop"
+    "Overall, we have #{names.count} great students"
+    sing = "Now we have #{students.count} student. Enter the next name or stop"
+    plur = "Now we have #{students.count} students. Enter the next name or stop"
+    if students.count < 2 
+      puts sing 
+    else
+      puts plur
+    end
   end
   students.each do |item|
     item.each do |key, value|
@@ -44,7 +51,7 @@ end
 # and then print them
 def print_header
   puts "Thes students of villains Academy"
-  puts "------------------"
+  puts "--------------"
 end
 
 
@@ -57,7 +64,13 @@ end
 
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  plur = "Overall, we have #{names.count} great students"
+  sing = "Overall, we have #{names.count} great student"
+  if names.count > 1
+    puts plur
+  else
+    puts sing
+  end
 end
 
 #nothing happens until we call the methods
