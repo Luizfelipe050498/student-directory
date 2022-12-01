@@ -5,8 +5,14 @@ def input_students
   students = []
   @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
   
-  while true do
+while true do
+  name = gets.strip
+
+  while name == ""
+    puts "Can't be blank"
     name = gets.strip
+  end
+
     break if name == "stop"
     puts "Enter cohort"
     cohort = gets.strip.capitalize
@@ -27,7 +33,6 @@ def input_students
     puts "Enter height"
     height = gets.strip
     students << {name: name, cohort: cohort, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
-    "Overall, we have #{names.count} great students"
     sing = "Now we have #{students.count} student. Enter the next name or stop"
     plur = "Now we have #{students.count} students. Enter the next name or stop"
     if students.count < 2 
