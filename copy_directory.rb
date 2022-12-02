@@ -1,37 +1,71 @@
+@students = []
+
+def interactive_menu
+  students = @students
+  while true
+    puts "What would you like to do?"
+    puts "1. Add new students"
+    puts "2. Show all students"
+    puts "3. Show students by cohort"
+    puts "4. Show students by country of birth"
+    puts "5. Save the data to a csv file"
+    puts "6. Load the list from students.csv"
+    puts "Type stop to return"
+    selection = STDIN.gets.chomp
+    
+    case selection
+    when "1"
+      input_students
+    when "2"
+      print_by_name(students)
+    when "3"
+      print_by_cohort(students)
+    when "4"
+      print_by_country(students)
+    when "5"
+      save_students
+    when "6"
+      load_students
+    when "stop"
+      break
+    else
+      puts "invalid input"
+    end
+  end      
+end
+
 def input_students
   puts "Please enter the names of the students"
   puts "To finish, just type stop"
-
-  @students = []
   @months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
   while true do
-    name = gets.strip
+    name = STDIN.gets.chomp
 
     while name == ""
       puts "Can't be blank"
-      name = gets.strip
+      name = STDIN.gets.chomp
     end
 
     break if name == "stop"
     puts "Enter cohort"
-    cohort = gets.strip.capitalize
+    cohort = STDIN.gets.chomp.capitalize
       loop do
         if @months.include?(cohort) # => true
           cohort == cohort.to_sym
           break
         else
           puts "We don't know this cohort, please check your spelling"
-          cohort = gets.strip.capitalize
+          cohort = STDIN.gets.chomp.capitalize
           break
         end
       end
     puts "Enter hobbies"
-    hobbies = gets.strip
+    hobbies = STDIN.gets.chomp
     puts "Enter country of birth"
-    country_of_birth = gets.strip
+    country_of_birth = STDIN.gets.chomp
     puts "Enter height"
-    height = gets.strip
+    height = STDIN.gets.chomp
     @students << {name: name, cohort: cohort, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
     sing = "Now we have #{@students.count} student. Enter the next name or stop"
     plur = "Now we have #{@students.count} students. Enter the next name or stop"
@@ -86,39 +120,8 @@ def print_footer(students)
   end
 end
 
-def interactive_menu
-  students = @students
-  while true
-    puts "What would you like to do?"
-    puts "1. Add new students"
-    puts "2. Show all students"
-    puts "3. Show students by cohort"
-    puts "4. Show students by country of birth"
-    puts "5. Save the data to a csv file"
-    puts "Type stop to return"
-    selection = gets.strip
-    
-    case selection
-    when "1"
-      input_students
-    when "2"
-      print_by_name(students)
-    when "3"
-      print_by_cohort(students)
-    when "4"
-      print_by_country(students)
-    when "5"
-      save_students
-    when "stop"
-      break
-    else
-      puts "invalid input"
-    end
-  end      
-end
-
 def save_students
-  file = File.open(".gitignore_students.csv", "w")
+  file = File.open("students.csv", "w")
 
   @students.each do |student|
     student_data = [student[:name], student[:cohort], student[:hobbies], student[:country_of_birth], student[:height]]
@@ -128,7 +131,7 @@ def save_students
   file.close
 end
 
-def load_students
+def load_students(filename = "students.csv")
   file = File.open("students.csv", "r")
   file.readlines.each do |line|
   name, cohort, hobbies, country_of_birth, height = line.chomp.split(',')
@@ -137,6 +140,17 @@ def load_students
   file.close
 end
 
-print_header
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exist?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
+end
+
+try_load_students
 interactive_menu
-print_footer(@students)
