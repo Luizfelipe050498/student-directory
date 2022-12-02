@@ -59,20 +59,20 @@ def print_header
 end 
 
 def print_by_name(students)
-  students.each do |student|
+  @students.each do |student|
     puts "#{student[:name]}"
   end
 end
 
 def print_by_cohort(students)
-  students.map { |stud| stud[:cohort] }.uniq.each { |c|
-    puts "#{c} cohort students are #{students.find_all { |s| s[:cohort] == c }.map { |s| s[:name] }.join(', ')}" 
+  @students.map { |stud| stud[:cohort] }.uniq.each { |c|
+    puts "#{c} cohort students are #{@students.find_all { |s| s[:cohort] == c }.map { |s| s[:name] }.join(', ')}" 
   }
 end
 
 def print_by_country(students)
-  students.map { |stud| stud[:country_of_birth] }.uniq.each { |c|
-    puts "#{c} is the country of birth of: #{students.find_all { |s| s[:country_of_birth] == c }.map { |s| s[:name] }.join(', ')}"
+  @students.map { |stud| stud[:country_of_birth] }.uniq.each { |c|
+    puts "#{c} is the country of birth of: #{@students.find_all { |s| s[:country_of_birth] == c }.map { |s| s[:name] }.join(', ')}" 
   }
 end
 
@@ -80,7 +80,7 @@ def print_footer(students)
   sing_end = "Overall, we have #{students.count} great student"
   plur_end = "Overall, we have #{students.count} great students"
   if students.count < 2
-    puts sing_endRUBY
+    puts sing_end
   else
     puts plur_end
   end
@@ -90,21 +90,24 @@ def interactive_menu
   students = @students
   while true
     puts "What would you like to do?"
-    puts "1. Show all students"
-    puts "2. Show students by cohort"
-    puts "3. Show students by country of birth"
-    puts "4. Save the data to a csv file"
+    puts "1. Add new students"
+    puts "2. Show all students"
+    puts "3. Show students by cohort"
+    puts "4. Show students by country of birth"
+    puts "5. Save the data to a csv file"
     puts "Type stop to return"
     selection = gets.strip
-
+    
     case selection
     when "1"
-      print_by_name(students)
+      input_students
     when "2"
-      print_by_cohort(students)
+      print_by_name(students)
     when "3"
-      print_by_country(students)
+      print_by_cohort(students)
     when "4"
+      print_by_country(students)
+    when "5"
       save_students
     when "stop"
       break
@@ -114,7 +117,7 @@ def interactive_menu
   end      
 end
 
-def save_students 
+def save_students
   file = File.open(".gitignore_students.csv", "w")
 
   @students.each do |student|
@@ -125,8 +128,15 @@ def save_students
   file.close
 end
 
-@students = input_students
+def load_students
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+  name, cohort, hobbies, country_of_birth, height = line.chomp.split(',')
+    @students << {name: name, cohort: cohort.to_sym, hobbies: hobbies, country_of_birth: country_of_birth, height: height}
+  end
+  file.close
+end
+
 print_header
 interactive_menu
 print_footer(@students)
-save_students 
