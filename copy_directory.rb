@@ -72,7 +72,7 @@ end
 
 def print_by_country(students)
   students.map { |stud| stud[:country_of_birth] }.uniq.each { |c|
-    puts "#{c} country of birth students are #{students.find_all { |s| s[:country_of_birth] == c }.map { |s| s[:name] }.join(', ')}" 
+    puts "#{c} is the country of birth of: #{students.find_all { |s| s[:country_of_birth] == c }.map { |s| s[:name] }.join(‘, ’)}"
   }
 end
 
@@ -80,7 +80,7 @@ def print_footer(students)
   sing_end = "Overall, we have #{students.count} great student"
   plur_end = "Overall, we have #{students.count} great students"
   if students.count < 2
-    puts sing_end
+    puts sing_endRUBY
   else
     puts plur_end
   end
@@ -108,7 +108,19 @@ def interactive_menu
   end      
 end
 
+def save_students 
+  file = File.open("students.csv", "w")
+
+  @students.each do |student|
+    student_data = [student[:name], student[:cohort], student[:hobbies], student[:country_of_birth], student[:height]]
+    csv_line = student_data.join(",")
+    file.puts csv_line
+  end
+  file.close
+end
+
 @students = input_students
 print_header
 interactive_menu
 print_footer(@students)
+save_students 
