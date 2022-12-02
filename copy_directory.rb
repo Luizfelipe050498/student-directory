@@ -72,7 +72,7 @@ end
 
 def print_by_country(students)
   students.map { |stud| stud[:country_of_birth] }.uniq.each { |c|
-    puts "#{c} is the country of birth of: #{students.find_all { |s| s[:country_of_birth] == c }.map { |s| s[:name] }.join(‘, ’)}"
+    puts "#{c} is the country of birth of: #{students.find_all { |s| s[:country_of_birth] == c }.map { |s| s[:name] }.join(', ')}"
   }
 end
 
@@ -93,23 +93,29 @@ def interactive_menu
     puts "1. Show all students"
     puts "2. Show students by cohort"
     puts "3. Show students by country of birth"
+    puts "4. Save the data to a csv file"
     puts "Type stop to return"
     selection = gets.strip
-    break if selection == "stop"
-    if selection == "1"
+
+    case selection
+    when "1"
       print_by_name(students)
-    elsif selection == "2"
+    when "2"
       print_by_cohort(students)
-    elsif selection == "3"
+    when "3"
       print_by_country(students)
+    when "4"
+      save_students
+    when "stop"
+      break
     else
-      puts "Invalid input"
+      puts "invalid input"
     end
   end      
 end
 
 def save_students 
-  file = File.open("students.csv", "w")
+  file = File.open(".gitignore_students.csv", "w")
 
   @students.each do |student|
     student_data = [student[:name], student[:cohort], student[:hobbies], student[:country_of_birth], student[:height]]
